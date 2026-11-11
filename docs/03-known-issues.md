@@ -83,10 +83,18 @@ adb shell getenforce   # 期望 Enforcing
 
 禁止以 permissive 或删除策略换取编译/启动成功。
 
-## R11 Crave 项目未知 — open
+## R11 Crave 无 Android 17 项目 — open
 
-尚未确认 FOSS 账号可用的项目列表。若无 PixelOS 17 项目，按平台"非官方 ROM"
-规则选最接近的基底项目，在 `crave run` 内重新 `repo init`（不得 `rm -rf *`）。
+实测（crave `0.2-7183`，2026-11-11）账号可见项目只有 LOS 16 / LOS 22.1 /
+LOS 23.2（Android 16）/ LOS CM 12.1 / ROM Dumper / TWRP / crave-devspaces。
+
+同时确认：**CLI 已无 `clone` 子命令**，工作区即 `crave run` 所在目录，
+首次运行需在 `crave run` 内 `repo init` + `/opt/crave/resync.sh`。
+
+决策选项见 `docs/02-build-plan.md` 的"基底选择"：
+A. LOS 23.2 作为最接近基底（需先探测镜像工具链）；
+B. 向 Crave 申请 Android 17 基底；
+C. 改做 PixelOS 16。
 
 ## 其他待办
 

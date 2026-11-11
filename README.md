@@ -76,14 +76,18 @@ PixelOS 17（Android 17 / CP2A）非官方适配工程，目标设备为小米 R
 
 ## 构建入口（Crave FOSS）
 
+> 已核实 crave CLI `0.2-7183`：没有 `crave clone` 子命令；工作区就是调用
+> `crave run` 时所在的目录。详细说明见 `docs/02-build-plan.md`。
+
 ```bash
-crave clone list                       # 确认项目 ID
-crave clone create --projectID <id> /crave-devspaces/PixelOS17
+mkdir -p /crave-devspaces/PixelOS17
 cd /crave-devspaces/PixelOS17
-crave run --no-patch -- "$(cat /path/to/crave/run.sh)"
+/path/to/this/repo/crave/run.sh <projectID> /crave-devspaces/PixelOS17 [platform]
 ```
 
-实际命令见 `crave/run.sh` 与 `docs/02-build-plan.md`。
+首次运行会在 `crave run` 内执行 `repo init` + `/opt/crave/resync.sh`。
+
+实际命令见 `crave/run.sh`、`crave/node.sh` 与 `docs/02-build-plan.md`。
 
 ## 审批与安全边界
 
