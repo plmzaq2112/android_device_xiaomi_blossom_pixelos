@@ -1,0 +1,19 @@
+# Patch series
+#
+# Format (whitespace separated, '#' starts a comment):
+#   <target directory in the source tree>    <patch path relative to repo root>
+#
+# Examples (disabled until triaged in phase 4):
+#   frameworks/base    patches/rom/0001-example.patch
+#   device/xiaomi/blossom  patches/device-tree/0001-example.patch
+#
+# rules:
+#   * applied with `git apply --check` first, build stops on the first failure
+#   * keep the series ordered and minimal
+#   * every entry must be traceable to an upstream commit or an issue in
+#     docs/03-known-issues.md
+#
+# Upstream crDroid patches under device/xiaomi/blossom/patches are NOT listed
+# here. They are applied by the upstream vendorsetup.sh during envsetup; their
+# applicability is reported by scripts/00-preflight.sh so conflicts are visible
+# in the build log instead of being silently skipped.

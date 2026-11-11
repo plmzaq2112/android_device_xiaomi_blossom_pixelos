@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PixelOS 17 local manifest for Xiaomi blossom (Redmi 9A family).
+
+  Usage:
+    mkdir -p .repo/local_manifests
+    cp local_manifests/pixelos-blossom.xml .repo/local_manifests/
+
+  Remotes are inherited from the PixelOS manifest:
+    github   -> github.com, revision seventeen
+  Every project below pins an explicit revision, so the github default does
+  not apply. Revision pins for upstream device/vendor trees are also recorded
+  in docs/01-dependency-pins.md.
+-->
+<manifest>
+
+  <!-- ============ Upstream device tree (unmodified) ============ -->
+  <project name="crdroidandroid/android_device_xiaomi_blossom"
+           path="device/xiaomi/blossom"
+           revision="17.0" />
+
+  <project name="crdroidandroid/proprietary_vendor_xiaomi_blossom"
+           path="vendor/xiaomi/blossom"
+           revision="17.0" />
+
+  <!-- ============ MediaTek common dependencies ============ -->
+  <!-- BoardConfig.mk includes device/mediatek/sepolicy_vndr/SEPolicy.mk -->
+  <project name="LineageOS/android_device_mediatek_sepolicy_vndr"
+           path="device/mediatek/sepolicy_vndr"
+           revision="lineage-24.0" />
+
+  <!-- MTK HAL services used by device.mk (audio/thermal/memtrack/usb/vibrator) -->
+  <project name="LineageOS/android_hardware_mediatek"
+           path="hardware/mediatek"
+           revision="lineage-24.0" />
+
+  <!-- ============ Camera ============ -->
+  <!-- BoardConfig.mk includes vendor/xiaomi/miuicamera/SEPolicy.mk and
+       device.mk inherits MiuiCamera.mk. Missing this repo fails at parse time. -->
+  <project name="Jayedkhan800/vendor_xiaomi_miuicamera"
+           path="vendor/xiaomi/miuicamera"
+           revision="main" />
+
+  <!-- ============ PixelOS product overlay (this repository) ============ -->
+  <project name="plmzaq2112/android_device_xiaomi_blossom_pixelos"
+           path="device/xiaomi/blossom-pixelos"
+           revision="main" />
+
+  <!-- ============ Prebuilt kernel ============ -->
+  <!-- BoardConfig.mk uses device/xiaomi/blossom-kernel/{kernel,dtb.img,dtbo.img}
+       with TARGET_FORCE_PREBUILT_KERNEL := true. -->
+  <project name="plmzaq2112/android_device_xiaomi_blossom-kernel"
+           path="device/xiaomi/blossom-kernel"
+           revision="pixelos-17" />
+
+</manifest>

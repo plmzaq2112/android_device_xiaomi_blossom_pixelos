@@ -1,0 +1,4 @@
+# build outputs and local scratch
+*.log
+out/
+tmp/

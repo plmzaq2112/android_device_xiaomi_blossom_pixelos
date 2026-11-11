@@ -1,0 +1,26 @@
+# crave.yaml - Crave build configuration for this project.
+#
+# IMPORTANT
+#   The top-level key MUST match the project name shown by `crave clone list`
+#   (for example "PixelOS" or "LineageOS 24"). Crave silently ignores entries
+#   whose key does not match.
+#
+# Placement
+#   Copy this file to the workspace root once, after `crave clone create`:
+#       cp crave/crave.yaml /crave-devspaces/PixelOS17/crave.yaml
+#   It is read by the client before the job starts, so editing it inside a
+#   `crave run` job only affects the *next* job.
+#
+# Why ignoreClientHostname
+#   Workspace persistence is keyed on a branch signature that includes the
+#   client hostname. Pinning it avoids a full resync when building from a
+#   different machine.
+
+PixelOS:
+  ignoreClientHostname: true
+  artifacts:
+    - out/target/product/blossom/PixelOS_blossom-*.zip
+    - out/target/product/blossom/boot.img
+    - out/target/product/blossom/dtbo.img
+    - out/target/product/blossom/build-info.txt
+    - out/verbose.log.gz
