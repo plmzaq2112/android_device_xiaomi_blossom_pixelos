@@ -16,6 +16,11 @@ def u32(buf, off):
     return struct.unpack_from("<I", buf, off)[0]
 
 
+def u32be(buf, off):
+    # dt_table_header (dtbo) stores all fields big-endian.
+    return struct.unpack_from(">I", buf, off)[0]
+
+
 def align_up(x, page):
     return ((x + page - 1) // page) * page
 
@@ -52,10 +57,10 @@ def extract_boot_dtb(src, dst):
 
 def extract_dtbo(src, dst):
     data = open(src, "rb").read()
-    magic = u32(data, 0)
+    magic = u32be(data, 0)
     if magic != 0xD7B7AB1E:
         raise SystemExit(f"bad dtbo magic: 0x{magic:08x}")
-    total_size = u32(data, 4)
+    total_size = u32be(data, 4)
     if total_size == 0 or total_size > len(data):
         raise SystemExit(f"invalid dtbo total_size: {total_size}")
 

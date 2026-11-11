@@ -26,6 +26,22 @@
 | 编译 | clang 21 + LLD + `aarch64-linux-gnu-` |
 | 产物 | `Image.gz`（gzip magic `1f 8b`） |
 
+## 设备树 blob（dtb.img / dtbo.img）
+
+来源：设备原厂分区备份（只提取，不修改）。
+
+| 文件 | 来源 | 大小 | SHA256 |
+|---|---|---|---|
+| `dtb.img` | 原厂 `boot-backup.img` 的 boot header v2 dtb 段 | 127,044 | `82bb85356992b8007bf90df26902bbdb93ad4f4a9670e2ac341d5d38a509320e` |
+| `dtbo.img` | 原厂 `dtbo-backup.img`，按 dt_table_header `total_size` 截断 | 144,732 | `4e02a5c2b9b4791c5e4c35cd40df2d5c787cbbe29bb08c2eeae8e9f9dca135e9` |
+
+交叉验证：
+
+- `dtb.img` 与 `Jayedkhan800/device_xiaomi_blossom-kernel@sixteen` 的 `dtb.img`
+  **SHA256 完全相同**。
+- `dtbo.img` 与同仓库 `dtbo.img` 的有效载荷（前 144,732 字节）**逐字节相同**；
+  上游文件多出的 3,700 字节为尾部填充。
+
 ## 更新流程
 
 1. 记录当前 `repo manifest -r` 输出（或逐个 `git -C <path> rev-parse HEAD`）。
