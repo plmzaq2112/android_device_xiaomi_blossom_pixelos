@@ -29,19 +29,25 @@ COMMIT="$(git -C "$KSRC" rev-parse HEAD)"
 SHORT="$(git -C "$KSRC" rev-parse --short=12 HEAD)"
 echo "== kernel commit: $COMMIT"
 
-echo "== configure"
-make -C "$KSRC" O="$KSRC/out-dandelion" ARCH=arm64 \
-    CC=clang CROSS_COMPILE=aarch64-linux-gnu- \
-    LD=ld.lld NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
-    STRIP=llvm-strip AR=llvm-ar blossom_purity_defconfig
+if [ -n "${KERNEL_IMG:-}" ]; then
+    echo "== using prebuilt kernel image: $KERNEL_IMG"
+    IMG="$KERNEL_IMG"
+else
+    echo "== configure"
+    make -C "$KSRC" O="$KSRC/out-dandelion" ARCH=arm64 \
+        CC=clang CROSS_COMPILE=aarch64-linux-gnu- \
+        LD=ld.lld NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
+        STRIP=llvm-strip AR=llvm-ar blossom_purity_defconfig
 
-echo "== build Image.gz"
-make -C "$KSRC" O="$KSRC/out-dandelion" ARCH=arm64 \
-    CC=clang CROSS_COMPILE=aarch64-linux-gnu- \
-    LD=ld.lld NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
-    STRIP=llvm-strip AR=llvm-ar -j"$(nproc)" Image.gz
+    echo "== build Image.gz"
+    make -C "$KSRC" O="$KSRC/out-dandelion" ARCH=arm64 \
+        CC=clang CROSS_COMPILE=aarch64-linux-gnu- \
+        LD=ld.lld NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump \
+        STRIP=llvm-strip AR=llvm-ar -j"$(nproc)" Image.gz
 
-IMG="$KSRC/out-dandelion/arch/arm64/boot/Image.gz"
+    IMG="$KSRC/out-dandelion/arch/arm64/boot/Image.gz"
+fi
+
 [ -s "$IMG" ] || { echo "FATAL: Image.gz not produced"; exit 1; }
 
 echo "== collect artifacts"
