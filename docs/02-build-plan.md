@@ -42,16 +42,31 @@ CLI 事实（已用 `--help` 核实）：
 | B. 申请 Android 17 基底 | 通过 Discord/Telegram 向 Crave 申请新增项目 | 等待时间不可控，但最合规 |
 | C. 改做 PixelOS 16 | 与基底版本完全一致 | 偏离 Android 17 目标 |
 
-推荐：**先 B 并行 A 的低成本探测**。探测命令只打印工具版本，不编译：
+决策：**不申请新项目，直接采用 A**，先做只读探测。
+
+### 工作区绑定（实测要点）
+
+本地机器没有 `/crave-devspaces`（那是 devspace 内部路径）。实测结论：
+
+1. 工作区必须先用**受支持项目**的 manifest 做一次 `repo init`（只 init，
+   不同步），否则 `crave run` 报
+   `Could not get project information for <path>`。
+2. `--platform` 必须是该项目允许的平台，否则报
+   `Invalid platform for project`；省略则用项目默认平台。
+3. 首次任务内再把 manifest 切到 PixelOS 17，然后 `/opt/crave/resync.sh`。
+   这正是平台文档的"非官方 ROM"流程。
+
+本轮使用的本地工作区：`/home/a12bbb/crave-workspaces/PixelOS17`，
+绑定 `accupara/los23.2@lineage-23.2`。
+
+### 探测任务
 
 ```bash
-crave run --projectID 99 --platform linux32 --no-patch -- \
-  "uname -a; nproc; free -g; java -version; python3 --version; \
-   command -v repo; command -v git-lfs; command -v patchelf; \
-   ls /opt/crave | head"
+crave run --projectID 99 --no-patch --no-artifacts --detached --json -- \
+  "curl -fsSL <probe.sh> -o /tmp/probe.sh && bash /tmp/probe.sh"
 ```
 
-该命令仍会创建项目 99 的工作区，属于"创建全新 Crave 工作区"，需用户批准。
+探测脚本：`crave/probe.sh`（只打印系统/工具链信息，不同步、不编译）。
 
 ## 1. 拟用命令
 

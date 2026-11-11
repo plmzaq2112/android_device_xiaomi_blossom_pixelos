@@ -22,8 +22,14 @@ log "fetch project config"
 rm -rf "$REPO_DIR"
 git clone --depth 1 "$REPO_URL" "$REPO_DIR"
 
+# The workspace must be bound to a supported base project for Crave to resolve
+# it (see docs/02-build-plan.md). Inside the job we switch the manifest to
+# PixelOS 17, which is the documented "unsupported ROM" flow.
 if [ ! -d .repo ]; then
-    log "first run: repo init PixelOS ${ROM_BRANCH} (depth 1)"
+    log "no manifest yet: repo init PixelOS ${ROM_BRANCH} (depth 1)"
+    repo init -u "$ROM_MANIFEST" -b "$ROM_BRANCH" --git-lfs --depth 1
+elif ! git -C .repo/manifests remote get-url origin 2>/dev/null | grep -q 'PixelOS-AOSP/android_manifest'; then
+    log "workspace bound to another manifest: switching to PixelOS ${ROM_BRANCH}"
     repo init -u "$ROM_MANIFEST" -b "$ROM_BRANCH" --git-lfs --depth 1
 fi
 
